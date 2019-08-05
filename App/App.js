@@ -1,23 +1,44 @@
 import React, {Fragment, Component} from 'react';
 import SmsAndroid  from 'react-native-get-sms-android';
+import SmsListener from 'react-native-android-sms-listener';
 import SplashScreen from 'react-native-splash-screen';
 import {
   PermissionsAndroid,
   Text,
   View,
   StatusBar,
-  Platform
+  Platform,
+  Alert
 } from 'react-native';
 import HomeScreen from './Components/HomeScreen';
 import {expenseKeyWords, moneySymbol, ignoreExpenseKeyWords} from './Constants/appConstants';
 
-async function requestSmsPermission() {
+async function requestSmsReadPermission() {
   try {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.READ_SMS,
       {
         title: 'Read SMS Permission',
         message: 'AI Expense Tracker Requires Read SMS Permission',
+        buttonNeutral: 'Ask Me Later',
+        buttonNegative: 'Cancel',
+        buttonPositive: 'OK',
+      },
+    );
+    return granted === PermissionsAndroid.RESULTS.GRANTED
+  } catch (err) {
+    console.warn(err);
+    return false;
+  }
+}
+
+async function requestSmsRecievePermission() {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.RECEIVE_SMS,
+      {
+        title: 'Recieve SMS Permission',
+        message: 'AI Expense Tracker Requires Recieve SMS Permission',
         buttonNeutral: 'Ask Me Later',
         buttonNegative: 'Cancel',
         buttonPositive: 'OK',
@@ -43,7 +64,7 @@ export default class App extends Component {
   componentDidMount = () => {
     SplashScreen.hide();
     if (Platform.OS === 'android') {
-      requestSmsPermission().then((bool) => {
+      requestSmsReadPermission().then((bool) => {
         /* List SMS messages matching the filter */
         const date = new Date();
         const firstDayTime = new Date(date.getFullYear(), date.getMonth(), 1).getTime();
@@ -83,15 +104,27 @@ export default class App extends Component {
             });
             this.setState({isReadSmsPermissionGranted: bool});
       });
+      requestSmsRecievePermission().then(() => {
+        this.SMSReadSubscription = SmsListener.addListener(message => {
+          console.log(message);
+        });
+      });
     } else {
-      alert(`Not Supported on ${Platform.OS.toUpperCase()} Platform`);
+      Alert.alert(
+        'Not Supported',
+        `Not Supported on ${Platform.OS.toUpperCase()} Platform`,
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
     }
   }
   render() {
     return (
       <Fragment>
         <StatusBar backgroundColor="steelblue" barStyle="light-content" />
-        {this.state.isReadSmsPermissionGranted ? (this.state.smsList.length ? <HomeScreen smsList={this.state.smsList} expense={this.state.expense} /> : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24}}>No Expense Messages to Read</Text></View>) : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24}}>Read SMS Permission required to work this APP properly.</Text></View>}
+        {this.state.isReadSmsPermissionGranted ? (this.state.smsList.length ? <HomeScreen smsList={this.state.smsList} expense={this.state.expense} /> : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24}}>No Expense Messages to Read</Text></View>) : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24}}>Read SMS Permission required.</Text></View>}
       </Fragment>
     );
   }
