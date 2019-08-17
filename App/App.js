@@ -92,7 +92,7 @@ export default class App extends Component {
                     });
                     let num = 0;
                     bool && moneySymbol.some((symbol) => {
-                      num = Number(list.body.toLowerCase().split(symbol)[1] && list.body.toLowerCase().split(symbol)[1].replace(",", "").match(/\d+(\.?\d+)/)[0] || 0);
+                      num = Number(list.body.toLowerCase().split(symbol)[1] && list.body.toLowerCase().split(symbol)[1].replace(",", "").replace(/ /g, "").match(/\d+(\.?\d+)/)[0] || 0);
                       return num;
                     });
                     // let num = bool && list.body.match(/\d+.\d+/) && Number(list.body.match(/\d+.\d+/)[0]) || 0;
@@ -124,7 +124,7 @@ export default class App extends Component {
     return (
       <Fragment>
         <StatusBar backgroundColor="steelblue" barStyle="light-content" />
-        {this.state.isReadSmsPermissionGranted ? (this.state.smsList.length ? <HomeScreen smsList={this.state.smsList} expense={this.state.expense} /> : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24}}>No Expense Messages to Read</Text></View>) : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24}}>Read SMS Permission required.</Text></View>}
+        {this.state.isReadSmsPermissionGranted ? (this.state.smsList.length ? <HomeScreen smsList={this.state.smsList} expense={this.state.expense} /> : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24, color: "white"}}>No Expense Messages to Read</Text></View>) : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24, color: "white"}}>Read SMS Permission required.</Text></View>}
       </Fragment>
     );
   }
