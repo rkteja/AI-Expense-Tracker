@@ -10,7 +10,7 @@ import {
   Platform,
   Alert
 } from 'react-native';
-import HomeScreen from './Components/HomeScreen';
+import ExpenseList from './Components/ExpenseList';
 import {expenseKeyWords, moneySymbol, ignoreExpenseKeyWords} from './Constants/appConstants';
 
 async function requestSmsReadPermission() {
@@ -124,7 +124,7 @@ export default class App extends Component {
     return (
       <Fragment>
         <StatusBar backgroundColor="steelblue" barStyle="light-content" />
-        {this.state.isReadSmsPermissionGranted ? (this.state.smsList.length ? <HomeScreen smsList={this.state.smsList} expense={this.state.expense} /> : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24, color: "white"}}>No Expense Messages to Read</Text></View>) : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24, color: "white"}}>Read SMS Permission required.</Text></View>}
+        {this.state.isReadSmsPermissionGranted ? (this.state.smsList.length ? <ExpenseList smsList={this.state.smsList} expense={this.state.expense} /> : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24, color: "white"}}>No Expense Messages to Read</Text></View>) : <View style={{backgroundColor: "steelblue", display: "flex", alignItems: "center", justifyContent: "center", height: "100%"}}><Text style={{padding: 5, textAlign: "center", fontSize: 24, color: "white"}}>Read SMS Permission required.</Text></View>}
       </Fragment>
     );
   }

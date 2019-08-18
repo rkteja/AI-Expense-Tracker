@@ -32,6 +32,8 @@ target 'AIexpenseTracker' do
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
   target 'AIexpenseTrackerTests' do
     inherit! :search_paths
     # Pods for testing

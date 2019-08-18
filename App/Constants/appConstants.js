@@ -11,3 +11,5 @@ export const expenseKeyWords = ["debited", "paid", "thank you for using", "thank
 export const ignoreExpenseKeyWords = ["ignore if paid", "ignore if already paid", "will be debited", "requested", "failed", "fail", "claim", "gift", "received", "otp", "password", "verification", "activation", "passcode", "osp", "refund", "refunded", "credit card bill", "through neft"]
 
 export const moneySymbol= ["inr", "rs"];
+
+export const iconBackGroundColor = ["#ff006a", "#ff0000", "#4b00ff", "#c32ab8", "#ff0000", "#33a585"]
